@@ -10,11 +10,12 @@ use PhpParser\Node\Expr\FuncCall;
 
 class UserController extends Controller
 {
-    // Thêm hàm khởi tạo __construct để áp dụng cho tất cả function trong class
+    //Hàm khởi tạo __construct sẽ áp dụng cho tất cả function trong class
+    //$this->user: Được sử dụng để giữ một đối tượng của lớp User trong phạm vi của đối tượng UserController.
     private $user;
-    public function __construct()
+    public function __construct(User $user)
     {
-        $this->user = new User();
+        $this->user = $user;
     }
 
     // 
@@ -55,7 +56,51 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('msg', 'Thêm người dùng thành công');
     }
 
+
+    //Phương thức ->with được sử dụng để chuyển dữ liệu (thông thường là các biến hoặc thông báo) đến chế độ xem
     public function getEdit($id = 0)
     {
+        $title = "Cập nhật người dùng";
+
+        if (!empty($id)) {
+            $userDetail = $this->user->getDetail($id);
+            if (!empty($userDetail[0])) {
+                $userDetail = $userDetail[0];
+            } else {
+                return redirect()->route('user.index')->with('msg', 'Người dùng không tồn tại');
+            }
+        } else {
+            return redirect()->route('user.index')->with('msg', 'Liên kết không tồn tại');
+        }
+        return view('clients.user.edit', compact('title', 'userDetail'));
+    }
+
+
+    // Xử lý validate
+    public function postEdit(Request $request, $id = 0)
+    {
+        $request->validate([
+            'fullname' => 'required|min:5',
+            'email' => 'required|email'
+        ], [
+            'fullname.required' => 'Họ và tên bắt buộc phải nhập',
+            'fullname.min' => 'Họ và tên phải từ 5 ký tự trở lên',
+            'email.required' => 'Email bắt buộc phải nhập',
+            'email.email' => 'Email không đúng định dạng',
+            // 'email.unique' => 'Email đã tồn tại trên hệ thống',
+        ]);
+
+
+
+        $dataUpdate = [
+            $request->fullname,
+            $request->email,
+            date('Y-m-d H:i:s')
+        ];
+        $this->user->updateUser($dataUpdate, $id);
+
+        // return redirect()->route('user.edit',['id'=>$id])->with('Cập nhật người dùng thành công');
+
+        return back()->with('Cập nhật người dùng thành công');
     }
 }

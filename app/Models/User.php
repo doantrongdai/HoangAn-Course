@@ -10,6 +10,7 @@ class User extends Model
 {
     use HasFactory;
 
+    //Định nghĩa tên của bảng cơ sở dữ liệu mà class User sẽ tương tác
     protected $table = 'user';
 
     public function getAllUser()
@@ -21,5 +22,19 @@ class User extends Model
     public function addUser($data)
     {
         DB::insert('INSERT INTO user (fullname, email, create_at) values(?,?,?)', $data);
+    }
+
+
+    public function getDetail($id)
+    {
+        return DB::select('SELECT * FROM ' . $this->table . '  WHERE id = ?', [$id]);
+    }
+
+
+
+    public function updateUser($data, $id)
+    {
+        $data = array_merge($data, [$id]);
+        return DB::update('UPDATE' . $this->table . 'SET fullname=?, email=?,update_at=? where id = ?', $data);
     }
 }
