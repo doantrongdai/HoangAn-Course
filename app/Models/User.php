@@ -34,7 +34,9 @@ class User extends Model
 
     public function updateUser($data, $id)
     {
-        $data = array_merge($data, [$id]);
-        return DB::update('UPDATE' . $this->table . 'SET fullname=?, email=?,update_at=? where id = ?', $data);
+        // $data = array_merge($data, [$id]); -> Sửa thành code dưới gọn hơn
+        $data[] = $id;
+        // Cần có một khoảng trắng sau 'UPDATE' và trước 'SET' trong câu lệnh SQL của bạn. Nếu không có những khoảng trắng này, tên bảng sẽ dính liền với các từ khóa SQL, dẫn đến lỗi cú pháp SQL.
+        return DB::update('UPDATE ' . $this->table . ' SET fullname=?, email=?,update_at=? where id = ?', $data);
     }
 }

@@ -81,13 +81,14 @@ class UserController extends Controller
     {
         $request->validate([
             'fullname' => 'required|min:5',
-            'email' => 'required|email'
+            // Cần thêm $id, nếu không có hệ thống check validate khi cập nhật lúc nào cũng luôn có mail đó trên hệ thống rồi.
+            'email' => 'required|email|unique:user,email,' . $id
         ], [
             'fullname.required' => 'Họ và tên bắt buộc phải nhập',
             'fullname.min' => 'Họ và tên phải từ 5 ký tự trở lên',
             'email.required' => 'Email bắt buộc phải nhập',
             'email.email' => 'Email không đúng định dạng',
-            // 'email.unique' => 'Email đã tồn tại trên hệ thống',
+            'email.unique' => 'Email đã tồn tại trên hệ thống',
         ]);
 
 
@@ -101,6 +102,6 @@ class UserController extends Controller
 
         // return redirect()->route('user.edit',['id'=>$id])->with('Cập nhật người dùng thành công');
 
-        return back()->with('Cập nhật người dùng thành công');
+        return back()->with('msg', 'Cập nhật người dùng thành công');
     }
 }

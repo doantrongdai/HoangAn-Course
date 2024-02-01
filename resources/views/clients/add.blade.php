@@ -11,11 +11,11 @@
     {{--$errors->any(): nếu có bất kì lỗi nào trong tất cả các error sẽ trả về thông báo error đó  --}}
     
     <form action="" method="POST" id="product-form">
-        {{-- @if ($errors->any())
+        @if ($errors->any())
         <div class="alert alert-danger text=center">
             {{$errorMessage}}
         </div>     
-        @endif --}}
+        @endif
 
         @error('msg')
             <div class= "alert alert-danger text-center">{{ $message }}</div>
