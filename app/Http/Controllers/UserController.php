@@ -21,7 +21,13 @@ class UserController extends Controller
     // 
     public function index()
     {
+        // $statement = $this->user->statementUser("DELETE FROM user");
+        // dd($statement);
+
         $title = 'Danh sách người dùng';
+
+        $this->user->learnQueryBuilder();
+
         $userList = $this->user->getAllUser();
         return view('clients.user.lists', compact('title', 'userList'));
     }
@@ -58,13 +64,14 @@ class UserController extends Controller
 
 
     //Phương thức ->with được sử dụng để chuyển dữ liệu (thông thường là các biến hoặc thông báo) đến chế độ xem
-    public function getEdit($id = 0)
+    public function getEdit(request $request, $id = 0)
     {
         $title = "Cập nhật người dùng";
 
         if (!empty($id)) {
             $userDetail = $this->user->getDetail($id);
             if (!empty($userDetail[0])) {
+                $request->session()->put('id', $id);
                 $userDetail = $userDetail[0];
             } else {
                 return redirect()->route('user.index')->with('msg', 'Người dùng không tồn tại');
@@ -77,8 +84,12 @@ class UserController extends Controller
 
 
     // Xử lý validate
-    public function postEdit(Request $request, $id = 0)
+    public function postEdit(Request $request)
     {
+        $id = session('id');
+        if (empty($id)) {
+            return back()->with('msg', 'ID không tồn tại');
+        }
         $request->validate([
             'fullname' => 'required|min:5',
             // Cần thêm $id, nếu không có hệ thống check validate khi cập nhật lúc nào cũng luôn có mail đó trên hệ thống rồi.
@@ -103,5 +114,27 @@ class UserController extends Controller
         // return redirect()->route('user.edit',['id'=>$id])->with('Cập nhật người dùng thành công');
 
         return back()->with('msg', 'Cập nhật người dùng thành công');
+    }
+
+    public function delete($id = 0)
+    {
+        // Kiểm tra xem có tồn tại người dùng đó không???
+        if (!empty($id)) {
+            $userDetail = $this->user->getDetail($id);
+            if (!empty($userDetail[0])) {
+                $deleteStatus = $this->user->deleteUser($id);
+                if ($deleteStatus) {
+                    $msg = 'Xoá người dùng thành công';
+                } else {
+                    $msg = 'Bạn không thể xoá người dùng lúc này';
+                }
+            } else {
+                $msg = 'Người dùng không tồn tại';
+            }
+        } else {
+            $msg = 'Liên kết không tồn tại';
+        }
+
+        return redirect()->route('user.index')->with('msg', $msg);
     }
 }

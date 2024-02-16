@@ -10,15 +10,15 @@
     <h1>Thêm sản phẩm</h1>
     {{--$errors->any(): nếu có bất kì lỗi nào trong tất cả các error sẽ trả về thông báo error đó  --}}
     
+
+    {{-- id="product-form" → Định nghĩa form này là product-form--}}
     <form action="" method="POST" id="product-form">
         @if ($errors->any())
-        <div class="alert alert-danger text=center">
-            {{$errorMessage}}
-        </div>     
+        <div class="alert alert-danger text=center">{{$errorMessage}}</div>     
         @endif
 
         @error('msg')
-            <div class= "alert alert-danger text-center">{{ $message }}</div>
+        <div class= "alert alert-danger text-center">{{ $message }}</div>
         @enderror
 
         <div class="mb-3">

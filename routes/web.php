@@ -83,5 +83,9 @@ Route::prefix('user')->name('user.')->group(function () {
 
     Route::get('/edit/{id}', [UserController::class, 'getEdit'])->name('edit');
 
-    Route::post('/edit/{id}', [UserController::class, 'postEdit'])->name('edit');
+    // Route::post('/edit/{id}', [UserController::class, 'postEdit'])->name('edit'); 
+    // → Không được truyền ID thông qua phương thức Post, sẽ bị hack thay product-form thông tin.
+    Route::post('/update', [UserController::class, 'postEdit'])->name('post-edit');
+
+    Route::get('/delete/{id}', [UserController::class, 'delete'])->name('delete');
 });

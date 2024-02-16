@@ -15,7 +15,7 @@
 
     <h1>{{ $title }}</h1>
     {{-- value ="old" -> Để lưu lại dữ liệu nhập trên giao diện --}}
-    <form action="" method="POST">
+    <form action="{{ route('user.post-edit') }}" method="POST">
         <div class="mb-3">
             <label for="">Họ và tên</label>
             <input type="text" class="form-control" name="fullname" placeholder="Họ và tên..." value="{{ old('fullname') ?? $userDetail->fullname }}"/>
