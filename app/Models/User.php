@@ -57,22 +57,68 @@ class User extends Model
         DB::enableQueryLog();
         // Lấy tất cả bản ghi của table, fullname as ho ten-> định danh sang thành "ho ten"
         // $id = 8;
-        $lists = DB::table($this->table)
-            ->select('*')
-            // ->where('id', 7)
-            // ->where(function ($query) use ($id) {
-            //     $query->where('id', '<', $id)->orwhere('id', '>', $id);
-            // })
-            // ->where('fullname', 'like', '%Dai%')
-            // ->wherenotBetween('id', [8, 10])
-            // ->whereIn('id', [8, 10])
-            // ->whereNotNull('update_at')
-            ->whereDate('update_at', '2024-02-16')
-            ->get();
+        // $lists = DB::table($this->table)
+        //     ->select('*')
+        // ->where('id', 7)
+        // ->where(function ($query) use ($id) {
+        //     $query->where('id', '<', $id)->orwhere('id', '>', $id);
+        // })
+        // ->where('fullname', 'like', '%Dai%')
+        // ->wherenotBetween('id', [8, 10])
+        // ->whereIn('id', [8, 10])
+        // ->whereNotNull('update_at')
+        // ->whereDate('update_at', '2024-02-16')
+        // ->get();
         // Lấy 1 bản ghi đầu tiên của table
-        dd($lists);
-        $sql = DB::getQueryLog();
-        dd($sql);
-        $detail = DB::table($this->table)->first();
+
+
+        //Join tables
+        // $lists = DB::table('user')
+        // ->select('user.*', 'groups.name as group_name')
+        // ->rightJoin('groups', 'user.group_id', '=', 'groups.id')
+        // ->orderBy('id', 'desc')
+        // ->select(DB::raw('count(id) as email_count'), 'email')
+        // ->groupBy('email')
+        // ->having('email_count', '>=', '2')
+        //     ->take(2)
+        //     ->skip(2)
+        //     ->get();
+        // dd($lists);
+
+        // $status = DB::table('user')->insert([
+        //     'fullname' => 'Nguyễn Văn A',
+        //     'email' => 'nguyenvana@gmail.com',
+        //     'group_id' => '1',
+        //     'create_at' => date('Y-m-d H:i:s')
+        // ]);
+        // $lastId = DB::getPdo()->lastInsertId();
+        // dd($lastId);
+
+        // $lastId = DB::table('user')->insertGetId([
+        //     'fullname' => 'Nguyễn Văn A',
+        //     'email' => 'nguyenvana@gmail.com',
+        //     'group_id' => 1,
+        //     'create_at' => date('Y-m-d H:i:s')
+        // ]);
+        // dd($lastId);
+
+        // $status = DB::table('user')
+        //     ->where('id', 11)
+        //     ->update([
+        //         'fullname' => 'Nguyễn Văn B',
+        //         'email' => 'nguyenvanb@gmail.com',
+        //         'update_at' => date('Y-m-d H:i:s')
+        //     ]);
+
+        // $status = DB::table('user')
+        //     ->where('id', 11)
+        //     ->delete();
+        // dd($status);
+
+        $count = DB::table('user')->where('id', '>', 1)->count();
+        dd($count);
+        // $sql = DB::getQueryLog();
+        // dd($sql);
+        // $detail = DB::table($this->table)->first();
     }
 }

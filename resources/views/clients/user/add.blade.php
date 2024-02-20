@@ -5,10 +5,12 @@
 @endsection
 
 @section('content')
+    {{-- Session msg thành công --}}
     @if (session('msg'))
     <div class="alert alert-success">{{ session('msg')}}</div> 
     @endif 
 
+     {{-- Session msg error --}}
     @if ($errors->any())
         <div class="alert alert-success">Dữ liệu nhập vào không hợp lệ. Vui lòng kiểm tra lại</div>
     @endif
